@@ -1,0 +1,24 @@
+admin_user:
+  first_name: Admin
+  last_name: User
+  role: admin
+  email: admin+user@example.org
+  encrypted_password: <%= User.new.send(:password_digest, 'passw0rd') %>
+blog_user_1:
+  first_name: First
+  last_name: Blogger
+  role: editor
+  email: first+blogger@example.org
+  encrypted_password: <%= User.new.send(:password_digest, 'passw0rd') %>
+blog_user_2:
+  first_name: Second
+  last_name: Blogger
+  role: editor
+  email: second+blogger@example.org
+  encrypted_password: <%= User.new.send(:password_digest, 'passw0rd') %>
+blog_user_2:
+  first_name: Third
+  last_name: Blogger
+  role: editor
+  email: third+blogger@example.org
+  encrypted_password: <%= User.new.send(:password_digest, 'passw0rd') %>
