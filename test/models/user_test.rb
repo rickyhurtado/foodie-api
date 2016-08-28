@@ -1,9 +1,15 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
-  def setup
+  setup do
     @admin = User.first
     @editor = User.second
+  end
+
+  test '#ensure_authentication_token' do
+    user = User.create(email: 'new+user@example.org', password: 'passw0rd', password_confirmation: 'passw0rd')
+
+    assert user.authentication_token.present?
   end
 
   test '#is_admin?' do
