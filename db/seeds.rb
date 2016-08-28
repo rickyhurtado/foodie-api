@@ -3,3 +3,7 @@ admin_user = User.create(email: 'admin+user@example.org', password: 'passw0rd', 
 blog_user_1 = User.create(email: 'blog+user+1@example.org', password: 'passw0rd', password_confirmation: 'passw0rd', first_name: 'First', last_name: 'Blogger', role: 'editor')
 blog_user_2 = User.create(email: 'blog+user+2@example.org', password: 'passw0rd', password_confirmation: 'passw0rd', first_name: 'Second', last_name: 'Blogger', role: 'editor')
 blog_user_3 = User.create(email: 'blog+user+3@example.org', password: 'passw0rd', password_confirmation: 'passw0rd', first_name: 'Third', last_name: 'Blogger', role: 'editor')
+
+category_1 = Category.create(name: 'Post')
+category_2 = Category.create(name: 'Recipe')
+category_3 = Category.create(name: 'Review')
