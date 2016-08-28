@@ -1,0 +1,47 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+blog_1:
+  title: First Blog
+  body: This is first blog post body.
+  category: post
+  user: blog_user_1
+blog_2:
+  title: First Recipe
+  body: This is second blog recipe body.
+  category: recipe
+  user: blog_user_1
+blog_3:
+  title: First Review
+  body: This is second blog recipe body.
+  category: review
+  user: blog_user_1
+blog_4:
+  title: Second Blog
+  body: This is second blog post body.
+  category: post
+  user: blog_user_2
+blog_5:
+  title: Second Recipe
+  body: This is second blog recipe body.
+  category: recipe
+  user: blog_user_2
+blog_6:
+  title: Second Review
+  body: This is second blog recipe body.
+  category: review
+  user: blog_user_2
+blog_7:
+  title: Third Blog
+  body: This is third blog post body.
+  category: post
+  user: blog_user_3
+blog_8:
+  title: Third Recipe
+  body: This is third blog recipe body.
+  category: recipe
+  user: blog_user_3
+blog_9:
+  title: Third Review
+  body: This is third blog recipe body.
+  category: review
+  user: blog_user_3

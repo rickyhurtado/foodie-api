@@ -1,8 +1,8 @@
-category_1:
+post:
   name: 'Post'
 
-category_2:
+recipe:
   name: 'Recipe'
 
-category_3:
+review:
   name: 'Review'
