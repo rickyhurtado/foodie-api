@@ -2,24 +2,44 @@ require 'test_helper'
 
 class ActivityStreamsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @activity_stream = activity_streams(:one)
+    @user = users(:blog_user_1)
+    @post = categories(:post)
+
+    @blog_create = Blog.create(
+      title: 'Activity Blog: Post',
+      body: '<p>This blog post tests the activity actions.</p>',
+      category: @post,
+      user: @user
+    )
+    @blog_update = Blog.find(@blog_create.id).update_attributes(
+      title: 'Activity Blog: Post [updated]',
+      body: '<p>This is activity blog post body is updated.</p>',
+      category: @post,
+      user: @user
+    )
+    @blog_destroy = Blog.destroy(@blog_create.id)
   end
 
-  test "should show activity_stream" do
-    get activity_stream_url(@activity_stream), as: :json
+  test "should show recent activities" do
+    get activity_streams_url, as: :json
+
     assert_response :success
   end
 
-  test "should update activity_stream" do
-    patch activity_stream_url(@activity_stream), params: { activity_stream: { action: @activity_stream.action, blog_id: @activity_stream.blog_id, user_id: @activity_stream.user_id } }, as: :json
-    assert_response 200
+  test "should show the upcoming activities" do
+    @activity = ActivityStream.last
+    get activity_stream_prev_url(@activity), as: :json
+
+    assert_response :success
   end
 
-  test "should destroy activity_stream" do
-    assert_difference('ActivityStream.count', -1) do
-      delete activity_stream_url(@activity_stream), as: :json
-    end
+  test "should previous activities on request" do
+    @activity = ActivityStream.second
+    get activity_stream_prev_url(@activity), as: :json
 
-    assert_response 204
+    json = YAML.load(response.body)
+
+    assert_response :success
+    assert json['data'].count.eql?(1)
   end
 end

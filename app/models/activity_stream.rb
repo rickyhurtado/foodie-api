@@ -2,7 +2,7 @@ class ActivityStream < ApplicationRecord
   default_scope { order('created_at DESC') }
 
   scope :recent, -> (limit) do
-    order_desc_limit(limit)
+   limit(limit)
   end
 
   scope :live, -> (id) do

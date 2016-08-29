@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  resources :activity_streams, only: [:show]
+  get 'activity_streams/prev/:id', to:'activity_streams#prev', as: 'activity_stream_prev'
+  resources :activity_streams, only: [:index, :show]
   resources :blogs
   resources :categories
   resources :users

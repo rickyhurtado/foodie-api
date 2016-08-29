@@ -1,41 +1,33 @@
 class ActivityStreamsController < ApplicationController
   include ActionController::Live
 
-  before_action :set_activity_stream, only: [:show]
-  before_action :set_prev_activity_stream, only: [:prev]
+  after_action :event_stream, only: [:index, :show]
+
+  # GET /activity_streams
+  def index
+    @activity_stream = ActivityStream.recent(20)
+  end
 
   # GET /activity_streams/:id
   def show
-    response.headers['Content-Type'] = 'text/event-stream'
-    response.stream.write "event: activity-stream\n"
-    response.stream.write "data: #{render json: @activity_stream}'\n\n"
-
-    rescue IOError
-      logger.info 'Stream closed'
-    ensure
-      response.stream.close
+    @activity_stream = ActivityStream.live(params[:id])
   end
 
   def prev
+    @activity_stream = ActivityStream.prev(params[:id], 10)
     render json: @activity_stream
   end
 
   private
-    # Only allow a trusted parameter "white list" through.
-    def activity_stream_params
-      params.require(:activity_stream).permit(:activity_stream_id)
-    end
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_activity_stream
-      if params[:id].eql?(0)
-        @activity_stream = ActivityStream.recent(20)
-      else
-        @activity_stream = ActivityStream.live(activity_stream_params[:id])
-      end
-    end
+    def event_stream
+      response.headers['Content-Type'] = 'text/event-stream'
+      response.stream.write "event: activity-stream\n"
+      response.stream.write "data: #{render json: @activity_stream}'\n\n"
 
-    def set_prev_activity_stream
-      @activity_stream = ActivityStream.prev(activity_stream_params[:id], 10)
+      rescue IOError
+        logger.info 'Stream closed'
+      ensure
+        response.stream.close
     end
 end
