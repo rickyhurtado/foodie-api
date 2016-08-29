@@ -19,3 +19,12 @@ Blog.create(title: 'Second Blog: Review', body: '<p>This is second blog review b
 Blog.create(title: 'Third Blog: Post', body: '<p>This is third blog post body.</p>', category: post, user: blog_user_3)
 Blog.create(title: 'Third Blog: Recipe', body: '<p>This is third blog recipe body.</p>', category: recipe, user: blog_user_3)
 Blog.create(title: 'Third Blog: Review', body: '<p>This is third blog review body.</p>', category: review, user: blog_user_3)
+
+puts '[Create blog to test the activity stream]'
+blog_activity = Blog.create(title: 'Activity Blog: Post', body: '<p>This blog post tests the activity actions.</p>', category: post, user: blog_user_1)
+
+puts '[Update blog to test the activity stream]'
+Blog.find(blog_activity).update_attributes(title: 'Activity Blog: Post [updated]', body: '<p>This is activity blog post body is updated.</p>', category: post, user: blog_user_1)
+
+puts '[Destroy blog to test the activity stream]'
+Blog.destroy(blog_activity)

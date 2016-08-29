@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :activity_streams, only: [:show]
   resources :blogs
   resources :categories
   resources :users
