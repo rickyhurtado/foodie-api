@@ -4,7 +4,11 @@ class BlogsController < ApplicationController
 
   # GET /blogs
   def index
-    @blogs = Blog.all
+    if params[:page]
+      @blogs = Blog.page(params[:page][:number])
+    else
+      @blogs = Blog.page
+    end
 
     render json: @blogs, include: ['user', 'category']
   end
