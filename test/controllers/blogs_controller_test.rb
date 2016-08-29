@@ -13,31 +13,25 @@ class BlogsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create blog" do
     assert_difference('Blog.count') do
-      post blogs_url,
-           params: { blog: { body: @blog.body, category_id: @blog.category_id, title: @blog.title, user_id: @blog.user_id } },
-           headers: { AUTHORIZATION: @user.authentication_token },
-           as: :json
+      post blogs_url, params: @blog_params, headers: @user_header_params, as: :json
     end
 
     assert_response 201
   end
 
   test "should show blog" do
-    get blog_url(@blog), headers: { AUTHORIZATION: @user.authentication_token }, as: :json
+    get blog_url(@blog), headers: @user_header_params, as: :json
     assert_response :success
   end
 
   test "should update blog" do
-    patch blog_url(@blog),
-          params: { blog: { body: @blog.body, category_id: @blog.category_id, title: @blog.title, user_id: @blog.user_id } },
-          headers: { AUTHORIZATION: @user.authentication_token },
-          as: :json
+    patch blog_url(@blog), params: @blog_params, headers: @user_header_params, as: :json
     assert_response 200
   end
 
   test "should destroy blog" do
     assert_difference('Blog.count', -1) do
-      delete blog_url(@blog), headers: { AUTHORIZATION: @user.authentication_token }, as: :json
+      delete blog_url(@blog), headers: @user_header_params, as: :json
     end
 
     assert_response 204
