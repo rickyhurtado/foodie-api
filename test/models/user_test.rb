@@ -2,8 +2,8 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   setup do
-    @admin = User.first
-    @editor = User.second
+    @admin = users(:admin_user)
+    @editor = users(:blog_user_1)
   end
 
   test '#ensure_authentication_token' do
