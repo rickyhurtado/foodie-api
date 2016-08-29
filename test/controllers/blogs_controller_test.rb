@@ -2,8 +2,15 @@ require 'test_helper'
 
 class BlogsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @user = User.second
+    @user = User.first
     @blog = @user.blogs.first
+    @blog_params = { blog: {
+      body: @blog.body,
+      category_id: @blog.category_id,
+      title: @blog.title,
+      user_id: @blog.user_id }
+    }
+    @user_header_params = { AUTHORIZATION: @user.authentication_token }
   end
 
   test "should get index" do
