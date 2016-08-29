@@ -31,7 +31,8 @@ class Blog < ApplicationRecord
         author: full_name,
         blog_id: self.id,
         blog_title: self.title,
-        blog_category: self.category.name,
+        category_id: self.category.id,
+        category_name: self.category.name,
         action: action
       )
     end
