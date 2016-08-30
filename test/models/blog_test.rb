@@ -20,6 +20,14 @@ class BlogTest < ActiveSupport::TestCase
     @blog_destroy = Blog.destroy(@blog_create.id)
   end
 
+  test 'scope :published' do
+    assert_equal Blog.published.count, 6
+  end
+
+  test 'scope :draft' do
+    assert_equal Blog.draft.count, 3
+  end
+
   test '#log_activity_create' do
     activity = ActivityStream.third
 

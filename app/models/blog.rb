@@ -1,6 +1,9 @@
 class Blog < ApplicationRecord
   default_scope { order('created_at DESC') }
 
+  scope :published, -> { where(status: 'published') }
+  scope :draft, -> { where(status: 'draft') }
+
   belongs_to :category
   belongs_to :user
 
