@@ -5,7 +5,7 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @user = User.first
     @category = Category.first
-    @user_header_params = { AUTHORIZATION: @user.authentication_token }
+    @user_header_params = { AUTHORIZATION: @user.authentication_token, EMAIL: @user.email }
   end
 
   test "should get index" do

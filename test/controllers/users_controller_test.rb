@@ -13,8 +13,8 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
       last_name: 'Blogger',
       role: 'editor' }
     }
-    @admin_header_params = { AUTHORIZATION: @admin.authentication_token }
-    @user_header_params = { AUTHORIZATION: @user.authentication_token }
+    @admin_header_params = { AUTHORIZATION: @admin.authentication_token, EMAIL: @admin.email }
+    @user_header_params = { AUTHORIZATION: @user.authentication_token, EMAIL: @user.email}
   end
 
   test "admin should get index" do
