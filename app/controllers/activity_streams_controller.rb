@@ -1,33 +1,36 @@
 class ActivityStreamsController < ApplicationController
   include ActionController::Live
 
-  after_action :event_stream, only: [:index, :show]
+  SSE_RETRY = 5000;
+  ACTIVITY_RECORDS_INIT_LIMIT = 20
+  ACTIVITY_RECORDS_PREV_LIMIT = 10
 
   # GET /activity_streams
   def index
-    @activity_stream = ActivityStream.recent(20)
+    @activity_stream = ActivityStream.recent(ACTIVITY_RECORDS_INIT_LIMIT)
+
+    response.headers['Content-Type'] = 'text/event-stream'
+
+    sse = SSE.new(response.stream, event: 'activity-stream')
+    sse.write(@activity_stream)
+  ensure
+    sse.close
   end
 
   # GET /activity_streams/:id
   def show
     @activity_stream = ActivityStream.live(params[:id])
+
+    response.headers['Content-Type'] = 'text/event-stream'
+
+    sse = SSE.new(response.stream, retry: 5000, event: 'activity-stream')
+    sse.write(@activity_stream)
+  ensure
+    sse.close
   end
 
   def prev
-    @activity_stream = ActivityStream.prev(params[:id], 10)
+    @activity_stream = ActivityStream.prev(params[:id], ACTIVITY_RECORDS_PREV_LIMIT)
     render json: @activity_stream
   end
-
-  private
-
-    def event_stream
-      response.headers['Content-Type'] = 'text/event-stream'
-      response.stream.write "event: activity-stream\n"
-      response.stream.write "data: #{render json: @activity_stream}'\n\n"
-
-      rescue IOError
-        logger.info 'Stream closed'
-      ensure
-        response.stream.close
-    end
 end

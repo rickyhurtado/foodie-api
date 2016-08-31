@@ -6,10 +6,10 @@ class ActivityStream < ApplicationRecord
   end
 
   scope :live, -> (id) do
-    where('id > ?', id).order('created_at DESC')
+    where('id > ?', id)
   end
 
   scope :prev, -> (id, limit) do
-    where('id < ?', id).order('created_at DESC').limit(limit)
+    where('id < ?', id).limit(limit)
   end
 end
