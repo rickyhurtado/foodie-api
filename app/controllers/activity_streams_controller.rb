@@ -1,7 +1,7 @@
 class ActivityStreamsController < ApplicationController
   include ActionController::Live
 
-  SSE_RETRY = 5000;
+  SSE_RETRY = 10000;
   ACTIVITY_RECORDS_INIT_LIMIT = 20
   ACTIVITY_RECORDS_PREV_LIMIT = 10
 
