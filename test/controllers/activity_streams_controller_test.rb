@@ -28,7 +28,7 @@ class ActivityStreamsControllerTest < ActionDispatch::IntegrationTest
 
   test "should show the upcoming activities" do
     @activity = ActivityStream.last
-    get activity_stream_prev_url(@activity), as: :json
+    get activity_stream_url(@activity), as: :json
 
     assert_response :success
   end
