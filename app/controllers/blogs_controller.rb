@@ -5,9 +5,9 @@ class BlogsController < ApplicationController
   # GET /blogs
   def index
     if params[:page]
-      @blogs = Blog.page(params[:page][:number])
+      @blogs = Blog.published.page(params[:page][:number])
     else
-      @blogs = Blog.page
+      @blogs = Blog.published.page
     end
 
     render json: @blogs, include: ['user', 'category']
