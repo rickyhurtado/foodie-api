@@ -2,50 +2,78 @@ require 'test_helper'
 
 class BlogTest < ActiveSupport::TestCase
   setup do
+    @published_at = Time.zone.now + 2.days
     @user = users(:blog_user_1)
     @post = categories(:post)
-
-    @blog_create = Blog.create(
+    @blog_create_published = Blog.create(
       title: 'Activity Blog: Post',
       body: '<p>This blog post tests the activity actions.</p>',
+      status: 'published',
       category: @post,
       user: @user
     )
-    @blog_update = Blog.find(@blog_create.id).update_attributes(
-      title: 'Activity Blog: Post [updated]',
-      body: '<p>This is activity blog post body is updated.</p>',
+    @blog_create_with_published_date = Blog.create(
+      title: 'Activity Blog: Post',
+      body: '<p>This blog post tests the activity actions.</p>',
+      status: 'published',
+      category: @post,
+      published_at: @published_at,
+      user: @user
+    )
+    @blog_create_draft = Blog.create(
+      title: 'Activity Blog: Post',
+      body: '<p>This blog post tests the activity actions.</p>',
+      status: 'draft',
       category: @post,
       user: @user
     )
-    @blog_destroy = Blog.destroy(@blog_create.id)
+
   end
 
   test 'scope :published' do
-    assert_equal Blog.published.count, 6
+    assert_equal Blog.published.count, 8
   end
 
   test 'scope :draft' do
-    assert_equal Blog.draft.count, 3
+    assert_equal Blog.draft.count, 4
+  end
+
+  test '#set_published_at' do
+    assert @blog_create_published.published_at.present?
+    assert_equal @blog_create_published.published_at.to_s, @blog_create_published.created_at.to_s
+    assert @blog_create_with_published_date.published_at.present?
+    assert_equal @blog_create_with_published_date.published_at.to_s, @published_at.to_s
   end
 
   test '#log_activity_create' do
-    activity = ActivityStream.third
+    activity = ActivityStream.find_by(blog_id: @blog_create_draft.id)
+    assert_equal activity.action, 'created'
 
-    assert_equal activity.blog_id, @blog_create.id.to_s
-    assert_equal activity.action, 'create'
+    activity = ActivityStream.find_by(blog_id: @blog_create_published.id)
+    assert_equal activity.action, 'published'
   end
 
   test '#log_activity_update' do
-    activity = ActivityStream.second
+    blog_update = Blog.find(@blog_create_draft.id).update_attributes(title: 'Activity Blog: Updated Post')
+    activity = ActivityStream.find_by(blog_id: @blog_create_draft.id)
+    assert_equal activity.action, 'updated'
 
-    assert_equal activity.blog_id, @blog_create.id.to_s
-    assert_equal activity.action, 'update'
+    blog_update = Blog.find(@blog_create_draft.id).update_attributes(status: 'published')
+    activity = ActivityStream.find_by(blog_id: @blog_create_draft.id)
+    assert_equal activity.action, 'published'
+
+    blog_update = Blog.find(@blog_create_draft.id).update_attributes(title: 'Activity Blog: Updated Post Again')
+    activity = ActivityStream.find_by(blog_id: @blog_create_draft.id)
+    assert_equal activity.action, 'updated'
+
+    blog_update = Blog.find(@blog_create_draft.id).update_attributes(status: 'draft')
+    activity = ActivityStream.find_by(blog_id: @blog_create_draft.id)
+    assert_equal activity.action, 'unpublished'
   end
 
   test '#log_activity_delete' do
-    activity = ActivityStream.first
-
-    assert_equal activity.blog_id, @blog_create.id.to_s
-    assert_equal activity.action, 'delete'
+    blog_destroy = Blog.find(@blog_create_published.id).destroy
+    activity = ActivityStream.find_by(blog_id: @blog_create_published.id)
+    assert_equal activity.action, 'deleted'
   end
 end
