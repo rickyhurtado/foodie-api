@@ -24,7 +24,19 @@ puts '[Create blog to test the activity stream]'
 blog_activity = Blog.create(title: 'Activity Blog: Post', body: '<p>This blog post tests the activity actions.</p>', status: 'draft', category: post, user: blog_user_1)
 
 puts '[Update blog to test the activity stream]'
-Blog.find(blog_activity).update_attributes(title: 'Activity Blog: Post [updated]', body: '<p>This is activity blog post body is updated.</p>', status: 'published', category: post, user: blog_user_1)
+Blog.find(blog_activity).update_attributes(title: 'Activity Blog: Post [updated]', status: 'draft')
+
+puts '[Publish blog to test the activity stream]'
+Blog.find(blog_activity).update_attributes(title: 'Activity Blog: Post [published]', status: 'published')
+
+puts '[Update blog to test the activity stream]'
+Blog.find(blog_activity).update_attributes(title: 'Activity Blog: Post [updated]')
+
+puts '[Unpublish blog to test the activity stream]'
+Blog.find(blog_activity).update_attributes(title: 'Activity Blog: Post [unpublished]', status: 'draft')
+
+puts '[Update blog to test the activity stream]'
+Blog.find(blog_activity).update_attributes(title: 'Activity Blog: Post [updated]')
 
 puts '[Destroy blog to test the activity stream]'
 Blog.destroy(blog_activity)

@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160830102506) do
+ActiveRecord::Schema.define(version: 20160904060020) do
 
   create_table "activity_streams", force: :cascade do |t|
-    t.string   "author_id"
+    t.integer  "author_id"
     t.string   "author"
-    t.string   "blog_id"
+    t.integer  "blog_id"
     t.string   "blog_title"
-    t.string   "category_id"
+    t.integer  "category_id"
     t.string   "category_name"
     t.string   "action"
     t.datetime "created_at",    null: false
@@ -29,9 +29,10 @@ ActiveRecord::Schema.define(version: 20160830102506) do
     t.string   "body"
     t.integer  "category_id"
     t.integer  "user_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
     t.string   "status"
+    t.datetime "published_at"
     t.index ["category_id"], name: "index_blogs_on_category_id"
     t.index ["user_id"], name: "index_blogs_on_user_id"
   end
