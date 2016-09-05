@@ -8,16 +8,16 @@ post = Category.create(name: 'Post')
 recipe = Category.create(name: 'Recipe')
 review = Category.create(name: 'Review')
 
-Blog.create(title: 'First Blog: Post', body: '<p>This is first blog post body.</p>', status: 'published', category: post, user: blog_user_1)
-Blog.create(title: 'First Blog: Recipe', body: '<p>This is first blog recipe body.</p>', status: 'published', category: recipe, user: blog_user_1)
-Blog.create(title: 'First Blog: Review', body: '<p>This is first blog review body.</p>', status: 'published', category: review, user: blog_user_1)
+Blog.create(title: 'First Blog: Post', body: '<p>This is first blog post body.</p>', status: 'published', category: post, user: blog_user_1, published_at: 70.days.ago)
+Blog.create(title: 'First Blog: Recipe', body: '<p>This is first blog recipe body.</p>', status: 'published', category: recipe, user: blog_user_1, published_at: 35.days.ago)
+Blog.create(title: 'First Blog: Review', body: '<p>This is first blog review body.</p>', status: 'published', category: review, user: blog_user_1, published_at: 20.days.ago)
 
-Blog.create(title: 'Second Blog: Post', body: '<p>This is second blog post body.</p>', status: 'published' , category: post, user: blog_user_2)
-Blog.create(title: 'Second Blog: Recipe', body: '<p>This is second blog recipe body.</p>', status: 'published', category: recipe, user: blog_user_2)
-Blog.create(title: 'Second Blog: Review', body: '<p>This is second blog review body.</p>', status: 'draft', category: review, user: blog_user_2)
+Blog.create(title: 'Second Blog: Post', body: '<p>This is second blog post body.</p>', status: 'published' , category: post, user: blog_user_2, published_at: 18.days.ago)
+Blog.create(title: 'Second Blog: Recipe', body: '<p>This is second blog recipe body.</p>', status: 'published', category: recipe, user: blog_user_2, published_at: 10.days.ago)
+Blog.create(title: 'Second Blog: Review', body: '<p>This is second blog review body.</p>', status: 'draft', category: review, user: blog_user_2, published_at: 7.days.ago)
 
-Blog.create(title: 'Third Blog: Post', body: '<p>This is third blog post body.</p>', status: 'published', category: post, user: blog_user_3)
-Blog.create(title: 'Third Blog: Recipe', body: '<p>This is third blog recipe body.</p>', status: 'draft', category: recipe, user: blog_user_3)
+Blog.create(title: 'Third Blog: Post', body: '<p>This is third blog post body.</p>', status: 'published', category: post, user: blog_user_3, published_at: 3.days.ago)
+Blog.create(title: 'Third Blog: Recipe', body: '<p>This is third blog recipe body.</p>', status: 'draft', category: recipe, user: blog_user_3, published_at: 7.hours.ago)
 Blog.create(title: 'Third Blog: Review', body: '<p>This is third blog review body.</p>', status: 'draft', category: review, user: blog_user_3)
 
 puts '[Create blog to test the activity stream]'
