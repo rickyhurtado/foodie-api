@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
-  get 'activity_streams/prev/:id', to:'activity_streams#prev', as: 'activity_stream_prev'
-  resources :reviews, only: [:index, :show]
-  resources :recipes, only: [:index, :show]
-  resources :posts, only: [:index, :show]
+  resources :reviews, only: [:index]
+  resources :recipes, only: [:index]
+  resources :posts, only: [:index]
+  get 'activity_streams/prev/:id', to: 'activity_streams#prev', as: 'activity_stream_prev'
   resources :activity_streams, only: [:index, :show]
   resources :blogs
   resources :categories

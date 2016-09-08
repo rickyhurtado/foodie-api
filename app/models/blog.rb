@@ -6,6 +6,7 @@ class Blog < ApplicationRecord
 
   scope :published, -> { where(status: 'published') }
   scope :draft, -> { where(status: 'draft') }
+  scope :published_by_user, -> (user_id) { where(status: 'published', user_id: user_id) }
 
   before_create :set_published_at
   after_create :log_activity_create

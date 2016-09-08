@@ -1,5 +1,5 @@
 class BlogsController < ApplicationController
-  before_action :authenticate_user_from_token!, except: [:index]
+  before_action :authenticate_user_from_token!, except: [:index, :show, :by_user]
   before_action :set_blog, only: [:show, :update, :destroy]
 
   # GET /blogs
@@ -15,7 +15,7 @@ class BlogsController < ApplicationController
 
   # GET /blogs/1
   def show
-    render json: @blog
+    render json: @blog, include: ['user', 'category']
   end
 
   # POST /blogs

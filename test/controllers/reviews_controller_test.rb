@@ -9,9 +9,4 @@ class ReviewsControllerTest < ActionDispatch::IntegrationTest
     get reviews_url, as: :json
     assert_response :success
   end
-
-  test "should show review" do
-    get review_url(@review), params: { id: @review.id }, as: :json
-    assert_response :success
-  end
 end
