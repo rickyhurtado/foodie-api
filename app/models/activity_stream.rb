@@ -26,5 +26,9 @@ class ActivityStream < ApplicationRecord
       category_name: blog.category.name,
       action: action
     )
+
+    if action.eql?('deleted')
+      ActivityStream.where(blog_id: blog.id).update_all(deleted: 1)
+    end
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160904060020) do
+ActiveRecord::Schema.define(version: 20160909105808) do
 
   create_table "activity_streams", force: :cascade do |t|
     t.integer  "author_id"
@@ -20,8 +20,9 @@ ActiveRecord::Schema.define(version: 20160904060020) do
     t.integer  "category_id"
     t.string   "category_name"
     t.string   "action"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.integer  "deleted",       limit: 1, default: 0
   end
 
   create_table "blogs", force: :cascade do |t|
