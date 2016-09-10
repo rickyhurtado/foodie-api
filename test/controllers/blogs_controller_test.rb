@@ -43,4 +43,9 @@ class BlogsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response 204
   end
+
+  test "should show blogs by user" do
+    get blogs_by_user_url(@blog), params: { user_id: @user.id }, as: :json
+    assert_response 200
+  end
 end

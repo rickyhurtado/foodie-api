@@ -43,6 +43,17 @@ class BlogsController < ApplicationController
     @blog.destroy
   end
 
+  # /blogs/user/1
+  def by_user
+    if params[:page]
+      @blogs = Blog.published_by_user(params[:user_id]).page(params[:page][:number])
+    else
+      @blogs = Blog.published_by_user(params[:user_id]).page
+    end
+
+    render json: @blogs, include: ['user', 'category']
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_blog

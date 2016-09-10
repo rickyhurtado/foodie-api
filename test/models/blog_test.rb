@@ -38,6 +38,10 @@ class BlogTest < ActiveSupport::TestCase
     assert_equal Blog.draft.count, 4
   end
 
+  test 'scope :published_by_user' do
+    assert_equal Blog.published_by_user(@user.id).count, 5
+  end
+
   test '#set_published_at' do
     assert @blog_create_published.published_at.present?
     assert_equal @blog_create_published.published_at.to_s, @blog_create_published.created_at.to_s
