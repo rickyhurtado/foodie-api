@@ -10,10 +10,11 @@ class SessionsController < ApplicationController
       user.save
 
       data = {
+        userId: user.id,
         token: user.authentication_token,
         email: user.email,
-        first_name: user.first_name,
-        last_name: user.last_name,
+        firstName: user.first_name,
+        lastName: user.last_name,
         role: user.role
       }
 
