@@ -8,7 +8,7 @@ class UsersController < ApplicationController
     if params[:page]
       @users = User.page(params[:page][:number])
     else
-      @users = User.page
+      @users = User.page(1).per(10)
     end
 
     render json: @users

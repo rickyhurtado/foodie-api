@@ -17,11 +17,11 @@ class User < ApplicationRecord
   end
 
   def is_admin?
-    self.role.eql?('admin')
+    self.role.downcase.eql?('admin')
   end
 
   def is_editor?
-    self.role.eql?('editor') || is_admin?
+    self.role.downcase.eql?('editor') || is_admin?
   end
 
   private
