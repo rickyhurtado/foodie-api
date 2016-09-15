@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user_from_token!, only: [:index]
-  before_action :check_admin_permission!, only: [:index]
+  before_action :authenticate_user_from_token!
+  before_action :check_admin_permission!
   before_action :set_user, only: [:show, :update, :destroy]
 
   # GET /users
@@ -14,7 +14,7 @@ class UsersController < ApplicationController
 
   # GET /users/1
   def show
-    if current_user_has_access?(@user)
+    if @current_user.is_admin?
       render json: @user
     else
       render json: 'bad credentials', status: 401 and return
@@ -34,7 +34,7 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1
   def update
-    if current_user_has_access?(@user)
+    if @current_user.is_admin?
       if @user.update(user_params)
         render json: @user
       else
@@ -47,7 +47,7 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
-    if current_user_has_access?(@user)
+    if @current_user.is_admin?
       @user.destroy
     else
       render json: 'bad credentials', status: 401 and return
