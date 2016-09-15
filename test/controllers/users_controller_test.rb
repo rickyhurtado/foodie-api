@@ -15,12 +15,12 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
         role: 'Editor'
       }
     }
-    @admin_header_params = { AUTHORIZATION: @admin.authentication_token, EMAIL: @admin.email }
-    @user_header_params = { AUTHORIZATION: @user.authentication_token, EMAIL: @user.email}
+    @admin_header_params = { HTTP_X_TOKEN: @admin.authentication_token, HTTP_X_EMAIL: @admin.email }
+    @user_header_params = { HTTP_X_TOKEN: @user.authentication_token, HTTP_X_EMAIL: @user.email }
   end
 
   test "admin should get index" do
-    get users_url, headers: @admin_header_params, as: :json
+    get users_url + '?limit=1&offset=1', headers: @admin_header_params, as: :json
     assert_response :success
   end
 
@@ -31,7 +31,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
   test "admin should create user" do
     assert_difference('User.count') do
-      post users_url, params: @user_params, headers: @admin_header_params, as: :json
+      post users_url + '?limit=1&offset=1', params: @user_params, headers: @admin_header_params, as: :json
     end
 
     assert_response 201

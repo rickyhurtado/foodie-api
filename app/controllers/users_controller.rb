@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :authenticate_user_from_token!
-  before_action :check_admin_permission!
+  before_action :check_admin_permission!, except: [:show]
   before_action :set_user, only: [:show, :update, :destroy]
 
   # GET /users
@@ -14,7 +14,7 @@ class UsersController < ApplicationController
 
   # GET /users/1
   def show
-    if @current_user.is_admin?
+    if @user
       render json: @user
     else
       render json: 'bad credentials', status: 401 and return

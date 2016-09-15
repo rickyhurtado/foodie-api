@@ -10,7 +10,7 @@ class BlogsControllerTest < ActionDispatch::IntegrationTest
       title: @blog.title,
       user_id: @blog.user_id }
     }
-    @user_header_params = { AUTHORIZATION: @user.authentication_token, EMAIL: @user.email }
+    @user_header_params = { HTTP_X_TOKEN: @user.authentication_token, HTTP_X_EMAIL: @user.email }
   end
 
   test "should get index" do

@@ -5,8 +5,6 @@ class BlogsController < ApplicationController
   # GET /blogs
   def index
     if params[:offset] && params[:limit]
-      authenticate_user_from_token!
-
       if @current_user.is_admin?
         @blogs = Blog.page(params[:offset]).per(params[:limit])
       else
@@ -25,8 +23,6 @@ class BlogsController < ApplicationController
 
   # GET /blogs/1
   def show
-    authenticate_user_from_token!
-
     unless params[:_]
       user = User.find(@blog.user_id)
 

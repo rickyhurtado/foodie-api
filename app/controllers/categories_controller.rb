@@ -1,5 +1,5 @@
 class CategoriesController < ApplicationController
-  before_action :authenticate_user_from_token!
+  before_action :authenticate_user_from_token!, except: [:index]
   before_action :set_category, only: [:show, :update, :destroy]
 
   # GET /categories
