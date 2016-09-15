@@ -1,14 +1,12 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user_from_token!, except: [:update, :destroy]
-  before_action :check_admin_permission!, except: [:update, :destroy]
+  before_action :authenticate_user_from_token!, only: [:index]
+  before_action :check_admin_permission!, only: [:index]
   before_action :set_user, only: [:show, :update, :destroy]
 
   # GET /users
   def index
-    if params[:page]
-      @users = User.page(params[:page][:number])
-    else
-      @users = User.page(1).per(10)
+    if params[:offset] && params[:limit]
+      @users = User.page(params[:offset]).per(params[:limit]).order('id DESC')
     end
 
     render json: @users
@@ -16,7 +14,11 @@ class UsersController < ApplicationController
 
   # GET /users/1
   def show
-    render json: @user
+    if current_user_has_access?(@user)
+      render json: @user
+    else
+      render json: 'bad credentials', status: 401 and return
+    end
   end
 
   # POST /users
@@ -32,7 +34,7 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1
   def update
-    if @current_user.is_admin? || @current_user.eql?(@user)
+    if current_user_has_access?(@user)
       if @user.update(user_params)
         render json: @user
       else
@@ -45,7 +47,7 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
-    if @current_user.is_admin? || @current_user.eql?(@user)
+    if current_user_has_access?(@user)
       @user.destroy
     else
       render json: 'bad credentials', status: 401 and return
@@ -60,6 +62,6 @@ class UsersController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def user_params
-      params.require(:user).permit(:email, :password, :password_confirmation, :first_name, :last_name, :role)
+      ActiveModelSerializers::Deserialization.jsonapi_parse(params)
     end
 end
