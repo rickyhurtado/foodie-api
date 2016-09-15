@@ -4,10 +4,20 @@ class BlogsController < ApplicationController
 
   # GET /blogs
   def index
-    if params[:page]
-      @blogs = Blog.published.page(params[:page][:number])
+    if params[:offset] && params[:limit]
+      authenticate_user_from_token!
+
+      if @current_user.is_admin?
+        @blogs = Blog.page(params[:offset]).per(params[:limit])
+      else
+        @blogs = Blog.by_user(@current_user.id).page(params[:offset]).per(params[:limit])
+      end
     else
-      @blogs = Blog.published.page
+      if params[:page]
+        @blogs = Blog.published.page(params[:page][:number])
+      else
+        @blogs = Blog.published.page
+      end
     end
 
     render json: @blogs, include: ['user', 'category']
@@ -15,7 +25,25 @@ class BlogsController < ApplicationController
 
   # GET /blogs/1
   def show
-    render json: @blog, include: ['user', 'category']
+    authenticate_user_from_token!
+
+    unless params[:_]
+      user = User.find(@blog.user_id)
+
+      if current_user_has_access?(user)
+        @blog
+      else
+        render json: 'not found', status: 404 and return
+      end
+    else
+      @blog = Blog.find_by(id: params[:id], status: 'published')
+    end
+
+    if @blog
+      render json: @blog, include: ['user', 'category']
+    else
+      render json: 'not found',  status: 404 and return
+    end
   end
 
   # POST /blogs
@@ -62,6 +90,6 @@ class BlogsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def blog_params
-      params.require(:blog).permit(:title, :body, :category_id, :user_id)
+      ActiveModelSerializers::Deserialization.jsonapi_parse(params)
     end
 end

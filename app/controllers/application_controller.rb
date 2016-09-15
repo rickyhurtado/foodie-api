@@ -23,4 +23,8 @@ class ApplicationController < ActionController::API
     def set_current_user
       @current_user ||= AuthenticateUserToken.execute request
     end
+
+    def current_user_has_access?(user)
+      @current_user && (@current_user.is_admin? || @current_user.eql?(user))
+    end
 end

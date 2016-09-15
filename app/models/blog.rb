@@ -1,11 +1,12 @@
 class Blog < ApplicationRecord
-  default_scope { order('published_at DESC') }
+  default_scope { order('published_at DESC, id DESC') }
 
   belongs_to :category
   belongs_to :user
 
   scope :published, -> { where(status: 'published') }
   scope :draft, -> { where(status: 'draft') }
+  scope :by_user, -> (user_id) { where(user_id: user_id) }
   scope :published_by_user, -> (user_id) { where(status: 'published', user_id: user_id) }
 
   before_create :set_published_at
