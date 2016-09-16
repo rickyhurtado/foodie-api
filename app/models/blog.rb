@@ -9,12 +9,18 @@ class Blog < ApplicationRecord
   scope :by_user, -> (user_id) { where(user_id: user_id) }
   scope :published_by_user, -> (user_id) { where(status: 'published', user_id: user_id) }
 
+  before_save :sanitize_content
   before_create :set_published_at
   after_create :log_activity_create
   after_update :log_activity_update
   after_destroy :log_activity_delete
 
   private
+
+    def sanitize_content
+      self.title = ActionController::Base.helpers.sanitize(self.title, tags: %w())
+      self.body = ActionController::Base.helpers.sanitize(self.body, tags: %w(p em strong a img))
+    end
 
     def set_published_at
       self.published_at ||= Time.zone.now

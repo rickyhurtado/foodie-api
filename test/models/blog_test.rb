@@ -6,8 +6,8 @@ class BlogTest < ActiveSupport::TestCase
     @user = users(:blog_user_1)
     @post = categories(:post)
     @blog_create_published = Blog.create(
-      title: 'Activity Blog: Post',
-      body: '<p>This blog post tests the activity actions.</p>',
+      title: '<h1>Activity Blog: Post</h1>',
+      body: '<p>This blog post <em>tests</em> the <code>activity actions</code>.</p>',
       status: 'published',
       category: @post,
       user: @user
@@ -40,6 +40,11 @@ class BlogTest < ActiveSupport::TestCase
 
   test 'scope :published_by_user' do
     assert_equal Blog.published_by_user(@user.id).count, 5
+  end
+
+  test '#sanitize_content' do
+    assert_equal @blog_create_published.title, 'Activity Blog: Post'
+    assert_equal @blog_create_published.body, '<p>This blog post <em>tests</em> the activity actions.</p>'
   end
 
   test '#set_published_at' do
