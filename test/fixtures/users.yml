@@ -4,25 +4,21 @@ admin_user:
   role: Admin
   email: admin+user@example.org
   encrypted_password: <%= User.new.send(:password_digest, 'passw0rd') %>
-  authentication_token: authenticationtoken1
 blog_user_1:
   first_name: First
   last_name: Blogger
   role: Editor
   email: first+blogger@example.org
   encrypted_password: <%= User.new.send(:password_digest, 'passw0rd') %>
-  authentication_token: authenticationtoken2
 blog_user_2:
   first_name: Second
   last_name: Blogger
   role: Editor
   email: second+blogger@example.org
   encrypted_password: <%= User.new.send(:password_digest, 'passw0rd') %>
-  authentication_token: authenticationtoken3
 blog_user_3:
   first_name: Third
   last_name: Blogger
   role: Editor
   email: third+blogger@example.org
   encrypted_password: <%= User.new.send(:password_digest, 'passw0rd') %>
-  authentication_token: authenticationtoken4

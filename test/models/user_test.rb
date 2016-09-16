@@ -9,7 +9,7 @@ class UserTest < ActiveSupport::TestCase
   test '#ensure_authentication_token' do
     user = User.create(email: 'new+user@example.org', password: 'passw0rd', password_confirmation: 'passw0rd')
 
-    assert user.authentication_token.present?
+    assert user.auth_api_tokens.last.token.present?
   end
 
   test '#is_admin?' do

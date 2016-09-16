@@ -2,15 +2,18 @@ require 'test_helper'
 
 class BlogsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @user = User.first
+    @user = users(:blog_user_1)
+    AuthApiToken.create(user_id: @user.id, token: 'authapitokenuser')
     @blog = @user.blogs.first
-    @blog_params = { blog: {
-      body: @blog.body,
-      category_id: @blog.category_id,
-      title: @blog.title,
-      user_id: @blog.user_id }
+    @blog_params = {
+      blog: {
+        body: @blog.body,
+        category_id: @blog.category_id,
+        title: @blog.title,
+        user_id: @blog.user_id
+      }
     }
-    @user_header_params = { HTTP_X_TOKEN: @user.authentication_token, HTTP_X_EMAIL: @user.email }
+    @user_header_params = { HTTP_X_TOKEN: @user.auth_api_tokens.last.token, HTTP_X_EMAIL: @user.email }
   end
 
   test "should get index" do

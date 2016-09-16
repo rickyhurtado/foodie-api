@@ -3,9 +3,10 @@ require 'json'
 
 class CategoriesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @user = User.first
-    @category = Category.first
-    @user_header_params = { HTTP_X_TOKEN: @user.authentication_token, HTTP_X_EMAIL: @user.email }
+    @user = users(:admin_user)
+    AuthApiToken.create(user_id: @user.id, token: 'authapitokenadmin')
+    @category = categories(:post)
+    @user_header_params = { HTTP_X_TOKEN: @user.auth_api_tokens.last.token, HTTP_X_EMAIL: @user.email }
   end
 
   test "should get index" do

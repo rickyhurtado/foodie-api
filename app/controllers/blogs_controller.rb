@@ -86,6 +86,8 @@ class BlogsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def blog_params
+      return params.require(:blog).permit(:title, :body, :category_id, :user_id) if ENV['RAILS_ENV'].eql?('test')
+
       ActiveModelSerializers::Deserialization.jsonapi_parse(params)
     end
 end

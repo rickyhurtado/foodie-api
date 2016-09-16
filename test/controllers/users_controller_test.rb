@@ -3,7 +3,9 @@ require 'test_helper'
 class UsersControllerTest < ActionDispatch::IntegrationTest
   setup do
     @admin = users(:admin_user)
+    AuthApiToken.create(user_id: @admin.id, token: 'authapitokenadmin')
     @user = users(:blog_user_1)
+    AuthApiToken.create(user_id: @user.id, token: 'authapitokenuser')
     @user_params = {
       user: {
         id: @user.id,
@@ -15,8 +17,8 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
         role: 'Editor'
       }
     }
-    @admin_header_params = { HTTP_X_TOKEN: @admin.authentication_token, HTTP_X_EMAIL: @admin.email }
-    @user_header_params = { HTTP_X_TOKEN: @user.authentication_token, HTTP_X_EMAIL: @user.email }
+    @admin_header_params = { HTTP_X_TOKEN: @admin.auth_api_tokens.last.token, HTTP_X_EMAIL: @admin.email }
+    @user_header_params = { HTTP_X_TOKEN: @user.auth_api_tokens.last.token, HTTP_X_EMAIL: @user.email }
   end
 
   test "admin should get index" do

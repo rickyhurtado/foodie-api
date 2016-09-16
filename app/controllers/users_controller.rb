@@ -62,6 +62,8 @@ class UsersController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def user_params
+      return params.require(:user).permit(:email, :password, :password_confirmation, :first_name, :last_name, :role) if ENV['RAILS_ENV'].eql?('test')
+
       ActiveModelSerializers::Deserialization.jsonapi_parse(params)
     end
 end

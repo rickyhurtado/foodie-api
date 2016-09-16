@@ -2,9 +2,11 @@ require 'test_helper'
 
 class SessionsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @user_params = { user: {
-      email: 'admin+user@example.org',
-      password: 'passw0rd' }
+    @user_params = {
+      user: {
+        email: 'admin+user@example.org',
+        password: 'passw0rd'
+      }
     }
   end
 
