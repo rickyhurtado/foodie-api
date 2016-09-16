@@ -6,12 +6,11 @@ class SessionsController < ApplicationController
 
     if user && user.valid_password?(params[:user][:password])
       # Update the token for added security on the next sign in session
-      user.ensure_authentication_token
-      user.save
+      token = user.ensure_authentication_token
 
       data = {
         userId: user.id,
-        token: user.authentication_token,
+        token: token.token,
         email: user.email,
         firstName: user.first_name,
         lastName: user.last_name,
