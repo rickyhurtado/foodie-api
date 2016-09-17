@@ -5,52 +5,61 @@ blog_1:
   body: This is first blog post body.
   status: published
   category: post
+  published_at: <%= 1.day.ago.to_s(:db) %>
   user: blog_user_1
 blog_2:
   title: First Recipe
   body: This is second blog recipe body.
   status: published
+  published_at: <%= 2.day.ago.to_s(:db) %>
   category: recipe
   user: blog_user_1
 blog_3:
   title: First Review
   body: This is second blog recipe body.
   status: published
+  published_at: <%= 3.day.ago.to_s(:db) %>
   category: review
   user: blog_user_1
 blog_4:
   title: Second Blog
   body: This is second blog post body.
   status: published
+  published_at: <%= 4.day.ago.to_s(:db) %>
   category: post
   user: blog_user_2
 blog_5:
   title: Second Recipe
   body: This is second blog recipe body.
   status: published
+  published_at: <%= 5.day.ago.to_s(:db) %>
   category: recipe
   user: blog_user_2
 blog_6:
   title: Second Review
   body: This is second blog recipe body.
   status: draft
+  published_at: <%= 6.day.ago.to_s(:db) %>
   category: review
   user: blog_user_2
 blog_7:
   title: Third Blog
   body: This is third blog post body.
   status: published
+  published_at: <%= 7.day.ago.to_s(:db) %>
   category: post
   user: blog_user_3
 blog_8:
   title: Third Recipe
   body: This is third blog recipe body.
   status: draft
+  published_at: <%= 8.day.ago.to_s(:db) %>
   category: recipe
   user: blog_user_3
 blog_9:
   title: Third Review
   body: This is third blog recipe body.
   status: draft
+  published_at: <%= 9.day.ago.to_s(:db) %>
   category: review
   user: blog_user_3

@@ -4,16 +4,44 @@ class Blog < ApplicationRecord
   belongs_to :category
   belongs_to :user
 
-  scope :published, -> { where(status: 'published') }
   scope :draft, -> { where(status: 'draft') }
   scope :by_user, -> (user_id) { where(user_id: user_id) }
-  scope :published_by_user, -> (user_id) { where(status: 'published', user_id: user_id) }
 
   before_save :sanitize_content
   before_create :set_published_at
   after_create :log_activity_create
   after_update :log_activity_update
   after_destroy :log_activity_delete
+
+  def self.all_published(current_user_id)
+    if current_user_id
+      where('(published_at <= ? AND status = ?) OR (user_id = ?)', Time.current.to_date, 'published', current_user_id)
+    else
+      where('published_at <= ? AND status = ?', Time.current.to_date, 'published')
+    end
+  end
+
+  def self.all_published_by_user(user_id, current_user_id)
+    if user_id.eql?(current_user_id)
+      where(user_id: user_id)
+    else
+      where('published_at <= ? AND status = ? AND user_id = ?', Time.current.to_date, 'published', user_id)
+    end
+  end
+
+  def self.all_published_by_category(category, current_user_id)
+    Category.find_by(name: category).blogs.all_published(current_user_id)
+  end
+
+  def self.get_blog(blog_id, current_user_id)
+    blog = where('id = ?', blog_id)
+
+    if blog.first[:user_id].eql?(current_user_id)
+      blog
+    else
+      where('published_at <= ? AND status = ? AND id = ?', Time.current.to_date, 'published', blog_id)
+    end
+  end
 
   private
 
