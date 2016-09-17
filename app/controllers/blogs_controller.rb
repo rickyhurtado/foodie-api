@@ -4,41 +4,19 @@ class BlogsController < ApplicationController
 
   # GET /blogs
   def index
-    if params[:offset] && params[:limit]
-      if @current_user.is_admin?
-        @blogs = Blog.page(params[:offset]).per(params[:limit])
-      else
-        @blogs = Blog.by_user(@current_user.id).page(params[:offset]).per(params[:limit])
-      end
+    if get_all_published_blogs.eql?('Unauthorized')
+      render status: 401
     else
-      if params[:page]
-        @blogs = Blog.published.page(params[:page][:number])
-      else
-        @blogs = Blog.published.page
-      end
+      render json: @blogs, include: ['user', 'category']
     end
-
-    render json: @blogs, include: ['user', 'category']
   end
 
   # GET /blogs/1
   def show
-    unless params[:_]
-      user = User.find(@blog.user_id)
-
-      if current_user_has_access?(user)
-        @blog
-      else
-        render json: 'not found', status: 404 and return
-      end
-    else
-      @blog = Blog.find_by(id: params[:id], status: 'published')
-    end
-
-    if @blog
+    if get_blog
       render json: @blog, include: ['user', 'category']
     else
-      render json: 'not found',  status: 404 and return
+      render status: 404 and return
     end
   end
 
@@ -69,11 +47,7 @@ class BlogsController < ApplicationController
 
   # /blogs/user/1
   def by_user
-    if params[:page]
-      @blogs = Blog.published_by_user(params[:user_id]).page(params[:page][:number])
-    else
-      @blogs = Blog.published_by_user(params[:user_id]).page
-    end
+    get_all_published_blogs_by_user
 
     render json: @blogs, include: ['user', 'category']
   end
@@ -89,5 +63,63 @@ class BlogsController < ApplicationController
       return params.require(:blog).permit(:title, :body, :category_id, :user_id) if ENV['RAILS_ENV'].eql?('test')
 
       ActiveModelSerializers::Deserialization.jsonapi_parse(params)
+    end
+
+    def get_all_published_blogs
+      if params[:offset] && params[:limit]
+        get_all_published_blogs_for_authorized_user
+      else
+        get_all_published_blogs_for_guest_user
+      end
+    end
+
+    def get_all_published_blogs_for_authorized_user
+      if @current_user
+        get_all_published_blogs_for_admin_user
+      else
+        'Unauthorized'
+      end
+    end
+
+    def get_all_published_blogs_for_admin_user
+      if @current_user.is_admin?
+        @blogs = Blog.page(params[:offset]).per(params[:limit])
+      else
+        @blogs = Blog.by_user(@current_user.id).page(params[:offset]).per(params[:limit])
+      end
+    end
+
+    def get_all_published_blogs_for_guest_user
+      if params[:page]
+        @blogs = Blog.all_published(current_user_id).page(params[:page][:number])
+      else
+        @blogs = Blog.all_published(current_user_id).page
+      end
+    end
+
+    def get_blog
+      if params[:_]
+        @blog = Blog.get_blog(params[:id], current_user_id).first
+      else
+        get_blog_for_admin_page
+      end
+    end
+
+    def get_blog_for_admin_page
+      user = User.find(@blog.user_id)
+
+      if current_user_has_access?(user)
+        @blog
+      else
+        render json: 'not found', status: 404 and return
+      end
+    end
+
+    def get_all_published_blogs_by_user
+      if params[:page]
+        @blogs = Blog.all_published_by_user(params[:user_id].to_i, current_user_id).page(params[:page][:number])
+      else
+        @blogs = Blog.all_published_by_user(params[:user_id].to_i, current_user_id).page
+      end
     end
 end

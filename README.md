@@ -1,5 +1,5 @@
 # Foodie API
-Rails 5.0.0 API and Ruby 2.3.1 for foodie blogging platform.
+[Foodie API v1.0.1-beta](https://github.com/rickyhurtado/foodie-api/tree/v1.0.1-beta) powered by Rails 5.0.0 API and Ruby 2.3.1.
 
 ## Development Setup
 ```

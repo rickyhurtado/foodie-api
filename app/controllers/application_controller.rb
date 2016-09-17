@@ -27,4 +27,8 @@ class ApplicationController < ActionController::API
     def current_user_has_access?(user)
       @current_user && (@current_user.is_admin? || @current_user.eql?(user))
     end
+
+    def current_user_id
+      @current_user ? @current_user.id : nil
+    end
 end

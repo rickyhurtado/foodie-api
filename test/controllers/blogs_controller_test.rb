@@ -2,6 +2,8 @@ require 'test_helper'
 
 class BlogsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    @admin = users(:admin_user)
+    AuthApiToken.create(user_id: @admin.id, token: 'authapitokenadmin')
     @user = users(:blog_user_1)
     AuthApiToken.create(user_id: @user.id, token: 'authapitokenuser')
     @blog = @user.blogs.first
@@ -13,11 +15,29 @@ class BlogsControllerTest < ActionDispatch::IntegrationTest
         user_id: @blog.user_id
       }
     }
+    @admin_header_params = { HTTP_X_TOKEN: @admin.auth_api_tokens.last.token, HTTP_X_EMAIL: @admin.email }
     @user_header_params = { HTTP_X_TOKEN: @user.auth_api_tokens.last.token, HTTP_X_EMAIL: @user.email }
   end
 
   test "should get index" do
     get blogs_url, as: :json
+    assert_response :success
+
+    get blogs_url, headers: @admin_header_params, as: :json
+    assert_response :success
+    get blogs_url, headers: @user_header_params, as: :json
+    assert_response :success
+
+    get "#{blogs_url}?page[number]=1", headers: @admin_header_params, as: :json
+    assert_response :success
+    get "#{blogs_url}?page[number]=1", headers: @user_header_params, as: :json
+    assert_response :success
+
+    get "#{blogs_url}?offset=1&limit=1", as: :json
+    assert_response 401
+    get "#{blogs_url}?offset=1&limit=1", headers: @admin_header_params, as: :json
+    assert_response :success
+    get "#{blogs_url}?offset=1&limit=1", headers: @user_header_params, as: :json
     assert_response :success
   end
 

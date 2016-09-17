@@ -1,12 +1,18 @@
-class RecipesController < ApplicationController
+class RecipesController < BlogsController
   # GET /recipes
   def index
-    if params[:page]
-      @recipes = Recipe.published.page(params[:page][:number])
-    else
-      @recipes = Recipe.published.page
-    end
+    get_all_published_recipes
 
-    render json: @recipes, include: ['user', 'category']
+    render json: @blogs, include: ['user', 'category']
   end
+
+  private
+
+    def get_all_published_recipes
+      if params[:page]
+        @blogs = Blog.all_published_by_category('Recipe', current_user_id).page(params[:page][:number])
+      else
+        @blogs = Blog.all_published_by_category('Recipe', current_user_id).page
+      end
+    end
 end

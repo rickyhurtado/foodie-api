@@ -1,12 +1,18 @@
 class ReviewsController < ApplicationController
   # GET /reviews
   def index
-    if params[:page]
-      @reviews = Review.published.page(params[:page][:number])
-    else
-      @reviews = Review.published.page
-    end
+    get_all_published_reviews
 
-    render json: @reviews, include: ['user', 'category']
+    render json: @blogs, include: ['user', 'category']
   end
+
+  private
+
+    def get_all_published_reviews
+      if params[:page]
+        @blogs = Blog.all_published_by_category('Review', current_user_id).page(params[:page][:number])
+      else
+        @blogs = Blog.all_published_by_category('Review', current_user_id).page
+      end
+    end
 end
