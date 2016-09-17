@@ -13,5 +13,19 @@ rails server
 ```
 rake db:migrate ENV=test
 rake db:fixtures:load RAILS_ENV=test
-rails test test
+bin/rails test
+```
+Specific folder:
+```
+bin/rails test test/controllers
+```
+
+Specific file:
+```
+bin/rails test test/controllers/users_controller_test.rb
+```
+
+Specific line:
+```
+bin/rails test test/controllers/users_controller_test.rb:24
 ```
